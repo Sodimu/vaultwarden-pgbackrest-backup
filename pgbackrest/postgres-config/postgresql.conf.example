@@ -1,0 +1,8 @@
+wal_level = replica
+archive_mode = on
+archive_command = 'pgbackrest --stanza=vaultwarden archive-push %p'
+max_wal_size = 2GB
+min_wal_size = 80MB
+listen_addresses = '*'
+port = 5432
+data_directory = '/var/lib/postgresql/data'
