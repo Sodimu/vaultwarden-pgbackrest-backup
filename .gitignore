@@ -1,0 +1,23 @@
+# Sensitive files
+.env
+*.conf
+!pgbackrest/config/pgbackrest.conf.example
+!pgbackrest/postgres-config/postgresql.conf.example
+
+# Logs
+logs/
+*.log
+
+# Backups
+backups/
+*.dump
+*.sql
+*.tar.gz
+
+# Docker volumes
+postgres_data/
+pgbackrest_repo/
+
+# System files
+.DS_Store
+*.swp

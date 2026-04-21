@@ -1,0 +1,55 @@
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    container_name: vaultwarden-postgres
+    restart: unless-stopped
+    working_dir: /var/lib/postgresql/data   # ADD THIS LINE
+    environment:
+      POSTGRES_DB: vaultwarden
+      POSTGRES_USER: vaultwarden
+      POSTGRES_PASSWORD: strongpassword123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - pgbackrest_repo:/var/lib/pgbackrest
+      - ./pgbackrest/log:/var/log/pgbackrest
+      - ./pgbackrest/postgres-config/postgresql.conf:/etc/postgresql/custom.conf:ro
+      - ./pgbackrest/config/pgbackrest.conf:/etc/pgbackrest.conf:ro
+    command: postgres -c config_file=/etc/postgresql/custom.conf
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vaultwarden -d vaultwarden"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    environment:
+      DATABASE_URL: postgresql://vaultwarden:strongpassword123@postgres:5432/vaultwarden
+      ADMIN_TOKEN: k63%AobBqf;F46Dq2q5
+      DOMAIN: "https://vault.0109999.xyz"
+      WEBSOCKET_ENABLED: "true"
+      SIGNUPS_ALLOWED: "true"
+    volumes:
+      - vaultwarden_data:/data
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: always
+    command: tunnel run
+    environment:
+      TUNNEL_TOKEN: eyJhIjoiNmMxN2E0ZGEyMTFiZTBjM2Y4Zjk5NGJkMjY1M2ExNmUiLCJ0IjoiNWYxZWFjYzktYWE4OS00YmRiLWFkNjktOGI4NDAwM2Q0OTVmIiwicyI6Ik5EZzFPREZtWkRNdE56QTJaaTAwWlRreUxUa3pOREF0T1RBMU1qQTJORE13TmpoaSJ9
+volumes:
+  postgres_data:
+  pgbackrest_repo:
+  vaultwarden_data:

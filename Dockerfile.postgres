@@ -1,0 +1,15 @@
+FROM postgres:15
+
+# Install pgBackRest
+RUN apt-get update && \
+    apt-get install -y pgbackrest && \
+    rm -rf /var/lib/apt/lists/* && \
+    mkdir -p /var/lib/pgbackrest /var/log/pgbackrest /tmp/pgbackrest && \
+    chown -R postgres:postgres /var/lib/pgbackrest /var/log/pgbackrest /tmp/pgbackrest
+
+# Copy config
+COPY pgbackrest/config/pgbackrest.conf /etc/pgbackrest/pgbackrest.conf
+
+USER postgres
+
+CMD ["postgres"]
