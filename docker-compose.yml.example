@@ -9,7 +9,7 @@ services:
     environment:
       POSTGRES_DB: vaultwarden
       POSTGRES_USER: vaultwarden
-      POSTGRES_PASSWORD: strongpassword123
+      POSTGRES_PASSWORD: YOUR_DB_PASSWORD_HERE
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - pgbackrest_repo:/var/lib/pgbackrest
@@ -35,8 +35,8 @@ services:
       - "8080:80"
     environment:
       DATABASE_URL: postgresql://vaultwarden:strongpassword123@postgres:5432/vaultwarden
-      ADMIN_TOKEN: k63%AobBqf;F46Dq2q5
-      DOMAIN: "https://vault.0109999.xyz"
+      ADMIN_TOKEN: YOUR_ADMIN_TOKEN_HERE
+      DOMAIN: "https://vault.yourdomain.xyz"
       WEBSOCKET_ENABLED: "true"
       SIGNUPS_ALLOWED: "true"
     volumes:
@@ -48,7 +48,7 @@ services:
     restart: always
     command: tunnel run
     environment:
-      TUNNEL_TOKEN: eyJhIjoiNmMxN2E0ZGEyMTFiZTBjM2Y4Zjk5NGJkMjY1M2ExNmUiLCJ0IjoiNWYxZWFjYzktYWE4OS00YmRiLWFkNjktOGI4NDAwM2Q0OTVmIiwicyI6Ik5EZzFPREZtWkRNdE56QTJaaTAwWlRreUxUa3pOREF0T1RBMU1qQTJORE13TmpoaSJ9
+      TUNNEL_TOKEN: Your_Cloudflare_Tunnel_token_Here #to expose to the internet via https
 volumes:
   postgres_data:
   pgbackrest_repo:

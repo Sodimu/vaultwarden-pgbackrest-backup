@@ -21,3 +21,4 @@ pgbackrest_repo/
 # System files
 .DS_Store
 *.swp
+docker-compose.yml
